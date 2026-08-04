@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-consumer
+  labels:
+    app: order-consumer
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: order-consumer
+  template:
+    metadata:
+      labels:
+        app: order-consumer
+    spec:
+      containers:
+        - name: order-consumer
+          image: registry.internal/order-consumer:latest
+          env:
+            # Orders fetched per poll. The poll round trip costs the same
+            # whatever comes back, so this is what bounds throughput.
+            - name: CONSUMER_BATCH_SIZE
+              value: "500"
+            - name: CONSUMER_POLL_COST
+              value: "40ms"
+            - name: CONSUMER_WORK_COST
+              value: "100us"
+            - name: CONSUMER_BACKLOG
+              value: "5000"
