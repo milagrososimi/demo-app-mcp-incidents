@@ -37,7 +37,7 @@ func main() {
 	}
 
 	client := gateway.New(upstream, timeout, retries)
-	slog.Info("starting payment-service", "timeout", client.Timeout(), "retries", retries)
+	slog.Info("starting payment-service", "upstream", upstream, "timeout", client.Timeout(), "retries", retries)
 
 	started := time.Now()
 	err := client.Authorize(context.Background(), orderID)
