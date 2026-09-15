@@ -57,3 +57,11 @@ func TestNewPool_SizeBelowOneIsRaised(t *testing.T) {
 		t.Fatalf("size = %d, want 1", got)
 	}
 }
+
+func TestPool_SizeReportsWhatItWasBuiltWith(t *testing.T) {
+	t.Parallel()
+
+	if got := NewPool(12).Size(); got != 12 {
+		t.Fatalf("size = %d, want 12", got)
+	}
+}

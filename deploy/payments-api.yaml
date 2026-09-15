@@ -24,8 +24,10 @@ spec:
               value: ":8080"
             # Concurrent database connections per replica. Sized against the
             # database's own connection limit divided by the replica count.
+            # Lowered for the shared tier, which allows fewer connections per
+            # client than the dedicated instance did.
             - name: DB_POOL_SIZE
-              value: "50"
+              value: "10"
             - name: DB_QUERY_DURATION
               value: "20ms"
             - name: DB_ACQUIRE_TIMEOUT

@@ -8,6 +8,14 @@ import (
 	"time"
 )
 
+// lookup is the body a successful lookup returns.
+type lookup struct {
+	PaymentID string `json:"payment_id"`
+	Status    string `json:"status"`
+	PoolSize  int    `json:"pool_size"`
+	PoolInUse int    `json:"pool_in_use"`
+}
+
 // Handler answers one payment lookup per request, holding a pooled connection
 // for as long as the query runs.
 type Handler struct {
@@ -49,11 +57,11 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(map[string]any{
-		"payment_id":  id,
-		"status":      "settled",
-		"pool_size":   h.pool.Size(),
-		"pool_in_use": h.pool.InUse(),
+	_ = json.NewEncoder(w).Encode(lookup{
+		PaymentID: id,
+		Status:    "settled",
+		PoolSize:  h.pool.Size(),
+		PoolInUse: h.pool.InUse(),
 	})
 	h.log(id, http.StatusOK, started, queued)
 }
