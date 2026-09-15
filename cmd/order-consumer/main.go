@@ -50,5 +50,6 @@ func main() {
 	slog.Info("drained the backlog",
 		"handled", handled,
 		"elapsed", elapsed.Round(time.Millisecond),
-		"orders_per_second", int(float64(handled)/elapsed.Seconds()))
+		"orders_per_second", int(float64(handled)/elapsed.Seconds()),
+		"batch_size", batcher.BatchSize())
 }
