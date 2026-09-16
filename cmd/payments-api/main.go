@@ -14,6 +14,9 @@ import (
 	"github.com/milagrososimi/demo-app-mcp-incidents/internal/payments"
 )
 
+// version is stamped at build time with -ldflags "-X main.version=...".
+var version = "dev"
+
 func main() {
 	var (
 		addr      = config.String("LISTEN_ADDR", ":8080")
@@ -23,7 +26,7 @@ func main() {
 	)
 
 	pool := payments.NewPool(poolSize)
-	slog.Info("starting payments-api", "addr", addr, "pool_size", pool.Size())
+	slog.Info("starting payments-api", "version", version, "addr", addr)
 
 	mux := http.NewServeMux()
 	mux.Handle("GET /payments/{id}", payments.NewHandler(pool, queryTime, waitTime))

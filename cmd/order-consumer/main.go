@@ -32,6 +32,9 @@ func (b *backlog) Poll(max int) []orders.Order {
 	return batch
 }
 
+// version is stamped at build time with -ldflags "-X main.version=...".
+var version = "dev"
+
 func main() {
 	var (
 		batchSize = config.Int("CONSUMER_BATCH_SIZE", 500)
@@ -41,7 +44,7 @@ func main() {
 	)
 
 	batcher := orders.NewBatcher(&backlog{remaining: queued}, batchSize, pollCost, workCost)
-	slog.Info("starting order-consumer", "batch_size", batcher.BatchSize(), "backlog", queued)
+	slog.Info("starting order-consumer", "version", version)
 
 	started := time.Now()
 	handled := batcher.Drain(context.Background())
@@ -50,6 +53,5 @@ func main() {
 	slog.Info("drained the backlog",
 		"handled", handled,
 		"elapsed", elapsed.Round(time.Millisecond),
-		"orders_per_second", int(float64(handled)/elapsed.Seconds()),
-		"batch_size", batcher.BatchSize())
+		"orders_per_second", int(float64(handled)/elapsed.Seconds()))
 }

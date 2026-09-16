@@ -15,6 +15,9 @@ import (
 	"github.com/milagrososimi/demo-app-mcp-incidents/internal/gateway"
 )
 
+// version is stamped at build time with -ldflags "-X main.version=...".
+var version = "dev"
+
 func main() {
 	var (
 		timeout  = config.Duration("UPSTREAM_TIMEOUT", 5*time.Second)
@@ -37,7 +40,7 @@ func main() {
 	}
 
 	client := gateway.New(upstream, timeout, retries)
-	slog.Info("starting payment-service", "upstream", upstream, "timeout", client.Timeout(), "retries", retries)
+	slog.Info("starting payment-service", "version", version, "upstream", upstream)
 
 	started := time.Now()
 	err := client.Authorize(context.Background(), orderID)
