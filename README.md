@@ -24,6 +24,13 @@ go run ./cmd/order-consumer                     # drains a backlog, reports thro
 go run ./cmd/payment-service                    # authorizes against a local stub
 ```
 
+Each service logs its version on startup. Builds stamp it from the release
+tag; an unstamped build reports `dev`.
+
+```bash
+go build -ldflags "-X main.version=$(git describe --tags)" ./cmd/order-consumer
+```
+
 ## Configuration
 
 Every setting is read from the environment. The manifests under `deploy/` are
