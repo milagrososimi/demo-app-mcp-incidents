@@ -18,10 +18,10 @@ spec:
         - name: order-consumer
           image: registry.internal/order-consumer:latest
           env:
-            # Orders fetched per poll. The poll round trip costs the same
-            # whatever comes back, so this is what bounds throughput.
+            # Capped to the broker's advertised per-fetch limit on the new
+            # cluster. Fewer orders per poll, but the poll itself is cheaper.
             - name: CONSUMER_BATCH_SIZE
-              value: "500"
+              value: "50"
             - name: CONSUMER_POLL_COST
               value: "40ms"
             - name: CONSUMER_WORK_COST

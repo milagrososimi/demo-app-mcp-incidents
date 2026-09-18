@@ -64,3 +64,15 @@ func TestNewBatcher_SizeBelowOneIsRaised(t *testing.T) {
 		t.Fatalf("batch size = %d, want 1", got)
 	}
 }
+
+func TestBatcher_HandlesAPartialFinalBatch(t *testing.T) {
+	t.Parallel()
+
+	queue := &fixedQueue{remaining: 120}
+	if got := NewBatcher(queue, 50, 0, 0).Drain(context.Background()); got != 120 {
+		t.Fatalf("handled = %d, want 120", got)
+	}
+	if last := queue.polls[len(queue.polls)-1]; last != 20 {
+		t.Fatalf("final poll = %d, want the 20 left over", last)
+	}
+}

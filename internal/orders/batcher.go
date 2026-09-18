@@ -47,17 +47,25 @@ func (b *Batcher) Drain(ctx context.Context) int {
 			return handled
 		}
 
+		polling := time.Now()
 		time.Sleep(b.pollCost)
 		batch := b.queue.Poll(b.batchSize)
 		if len(batch) == 0 {
 			return handled
 		}
+		polled := time.Since(polling)
 
+		working := time.Now()
 		for range batch {
 			time.Sleep(b.workCost)
 			handled++
 		}
-		slog.Debug("drained a batch", "size", len(batch), "handled", handled)
+
+		slog.Debug("drained a batch",
+			"size", len(batch),
+			"handled", handled,
+			"poll_ms", polled.Milliseconds(),
+			"work_ms", time.Since(working).Milliseconds())
 	}
 }
 

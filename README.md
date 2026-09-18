@@ -31,6 +31,9 @@ tag; an unstamped build reports `dev`.
 go build -ldflags "-X main.version=$(git describe --tags)" ./cmd/order-consumer
 ```
 
+At debug level the consumer also reports, per batch, how long the poll round
+trip took and how long the orders in it took to handle.
+
 ## Configuration
 
 Every setting is read from the environment. The manifests under `deploy/` are
