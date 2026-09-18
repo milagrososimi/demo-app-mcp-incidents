@@ -65,3 +65,14 @@ func TestPool_SizeReportsWhatItWasBuiltWith(t *testing.T) {
 		t.Fatalf("size = %d, want 12", got)
 	}
 }
+
+func TestPool_ReleasingAnUnheldSlotIsANoOp(t *testing.T) {
+	t.Parallel()
+
+	pool := NewPool(2)
+	pool.Release()
+
+	if got := pool.InUse(); got != 0 {
+		t.Fatalf("in use = %d after releasing nothing, want 0", got)
+	}
+}
