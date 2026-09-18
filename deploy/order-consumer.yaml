@@ -18,10 +18,9 @@ spec:
         - name: order-consumer
           image: registry.internal/order-consumer:latest
           env:
-            # Capped to the broker's advertised per-fetch limit on the new
-            # cluster. Fewer orders per poll, but the poll itself is cheaper.
+            # Sized against the broker's per-fetch limit on the new cluster.
             - name: CONSUMER_BATCH_SIZE
-              value: "50"
+              value: "100"
             - name: CONSUMER_POLL_COST
               value: "40ms"
             - name: CONSUMER_WORK_COST
