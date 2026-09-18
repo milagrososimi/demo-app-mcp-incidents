@@ -7,6 +7,8 @@ package main
 import (
 	"context"
 	"log/slog"
+	"os"
+	"os/signal"
 	"time"
 
 	"github.com/milagrososimi/demo-app-mcp-incidents/internal/config"
@@ -46,8 +48,12 @@ func main() {
 	batcher := orders.NewBatcher(&backlog{remaining: queued}, batchSize, pollCost, workCost)
 	slog.Info("starting order-consumer", "version", version)
 
+	// A drain in progress should finish its batch, not die mid-flight.
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer stop()
+
 	started := time.Now()
-	handled := batcher.Drain(context.Background())
+	handled := batcher.Drain(ctx)
 	elapsed := time.Since(started)
 
 	slog.Info("drained the backlog",
