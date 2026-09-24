@@ -11,7 +11,9 @@ import (
 
 // Client authorizes payments against the upstream processor.
 //
-// The timeout is per attempt, not per authorization: a retry starts its own.
+// The timeout is per attempt, not per authorization: a retry starts its own,
+// so the longest an authorization can take is the timeout times the number of
+// attempts it is allowed.
 type Client struct {
 	http    *http.Client
 	baseURL string

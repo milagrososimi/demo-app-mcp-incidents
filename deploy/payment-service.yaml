@@ -24,7 +24,9 @@ spec:
             - name: UPSTREAM_URL
               value: "https://processor.internal"
             # Per attempt, not per authorization: a retry starts its own.
+            # The processor publishes a 2s p99, so an attempt that outlives
+            # it has already lost its answer.
             - name: UPSTREAM_TIMEOUT
-              value: "5s"
+              value: "2s"
             - name: UPSTREAM_RETRIES
               value: "2"
