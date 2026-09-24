@@ -38,7 +38,7 @@ func main() {
 	server := &http.Server{
 		Addr:              addr,
 		Handler:           mux,
-		ReadHeaderTimeout: 5 * time.Second,
+		ReadHeaderTimeout: 15 * time.Second,
 	}
 	if err := server.ListenAndServe(); err != nil {
 		slog.Error("payments-api stopped", "error", err)
