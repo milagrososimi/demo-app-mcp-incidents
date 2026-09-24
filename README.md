@@ -71,3 +71,7 @@ reproduce what a deployment does.
 
 The history here is referenced from outside the repository. Please do not
 rewrite it.
+
+## Runbook
+
+Operational notes live in [`doc/runbook.md`](doc/runbook.md).
