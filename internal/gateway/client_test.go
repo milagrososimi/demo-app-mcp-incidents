@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"net/http/httptest"
+	"sync"
 	"testing"
 	"time"
 )
@@ -66,5 +67,37 @@ func TestClient_TimeoutReportsWhatItWasBuiltWith(t *testing.T) {
 
 	if got := New("http://example.invalid", 3*time.Second, 0).Timeout(); got != 3*time.Second {
 		t.Fatalf("timeout = %v, want 3s", got)
+	}
+}
+
+func TestClient_AttemptsAreSequential(t *testing.T) {
+	t.Parallel()
+
+	var mu sync.Mutex
+	var concurrent, peak int
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		mu.Lock()
+		concurrent++
+		if concurrent > peak {
+			peak = concurrent
+		}
+		mu.Unlock()
+
+		time.Sleep(20 * time.Millisecond)
+		w.WriteHeader(http.StatusInternalServerError)
+
+		mu.Lock()
+		concurrent--
+		mu.Unlock()
+	}))
+	t.Cleanup(server.Close)
+
+	_ = New(server.URL, time.Second, 2).Authorize(context.Background(), "ord_4")
+
+	mu.Lock()
+	defer mu.Unlock()
+	if peak != 1 {
+		t.Fatalf("upstream saw %d attempts at once, want them one at a time", peak)
 	}
 }
