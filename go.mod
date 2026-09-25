@@ -1,3 +1,3 @@
-module github.com/milagrososimi/demo-app-mcp-incidents
+module github.com/AutopticAI/demo-app-mcp-incidents
 
 go 1.24

@@ -11,8 +11,8 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/milagrososimi/demo-app-mcp-incidents/internal/config"
-	"github.com/milagrososimi/demo-app-mcp-incidents/internal/orders"
+	"github.com/AutopticAI/demo-app-mcp-incidents/internal/config"
+	"github.com/AutopticAI/demo-app-mcp-incidents/internal/orders"
 )
 
 // backlog stands in for the broker, so the consumer can be run on its own.

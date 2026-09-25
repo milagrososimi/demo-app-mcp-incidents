@@ -10,8 +10,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/milagrososimi/demo-app-mcp-incidents/internal/config"
-	"github.com/milagrososimi/demo-app-mcp-incidents/internal/payments"
+	"github.com/AutopticAI/demo-app-mcp-incidents/internal/config"
+	"github.com/AutopticAI/demo-app-mcp-incidents/internal/payments"
 )
 
 // version is stamped at build time with -ldflags "-X main.version=...".
